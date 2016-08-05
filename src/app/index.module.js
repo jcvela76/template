@@ -2,6 +2,6 @@
   'use strict';
 
   angular
-    .module('template', ['ngAnimate', 'ngResource', 'ui.router', 'ui.bootstrap', 'toastr']);
+    .module('template', ['ngAnimate', 'ngResource', 'ui.router', 'ui.bootstrap']);
 
 })();

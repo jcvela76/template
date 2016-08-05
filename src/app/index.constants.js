@@ -3,8 +3,6 @@
   'use strict';
 
   angular
-    .module('template')
-    .constant('malarkey', malarkey)
-    .constant('moment', moment);
+    .module('template');
 
 })();
