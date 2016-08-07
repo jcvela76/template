@@ -3,72 +3,50 @@
 
   angular
     .module('template')
-
-    .service('MainControllerDataService',function($resource){
+    .service('MainControllerDataService', function($firebaseObject, $firebaseArray) {
       var self = this;
+      var config = {
+        apiKey: "AIzaSyDYP0oGBtqW5arhea6I6G9l2Jp96ItnyfU",
+        authDomain: "classproject-fa817.firebaseapp.com",
+        databaseURL: "https://classproject-fa817.firebaseio.com",
+        storageBucket: "classproject-fa817.appspot.com",
+      };
+      var myApp = firebase.initializeApp(config);
+      var adminRef = myApp.database().ref('admin');
+      var topicsRef = myApp.database().ref('topics');
 
-      var myResourceObject = $resource('assets/json/people.json', {
-          limit:100
-        }, {
+      self.getAdmin = function(scope) {
+        var firebaseObject = $firebaseObject(adminRef);
+        // return firebaseObject
+        firebaseObject.$bindTo(scope, 'ctrl.currentAdmin')
+      };
 
-            getThelistOfPeople:{
-              method: 'GET',
-              isArray: true,
-              headers:{
-                accept: 'application/json',
-                userToken: 'abcdefg'
-              }
-            },
-            saveListOfPeople:{
-              method: 'POST',
-              isArray: false
-            }
+      self.saveAdmin = function(admin) {
+        admin.$save().then(function() {
+          console.log('Saved the Admin Successfully');
+        });
+      };
 
-        });//declareted myResourceObject
-
-      var myFriendsResourse = $resource('assets/json/:userId/profile.json')
-
-        self.getPeople = function(){
-          return myResourceObject.getThelistOfPeople({
-            page:1,
-            search: 'name',
-            limit: 5
-          })
-          .$promise
-        };// get people
-
-        self.getFriends = function(friend){
-          return myFriendsResourse.query({
-            userId: friend._id
-          }).$promise
-        };// get friends
-
-
+      self.getTopics = function() {
+        return $firebaseArray(topicsRef);
+      };
     })
 
-    .controller('MainController', function (MainControllerDataService) 
-      {
-        var self = this;
-        self.greeting = "Hello World";
 
-        MainControllerDataService.getPeople()
-        .then(function onSuccess(response){
-          console.log(response);
-          self.people = response;
-        });// put the people en index
+    .controller('MainController', function ($scope, MainControllerDataService) {
+      var self = this;
+      self.greeting = "Hello World";
+      
+      MainControllerDataService.getAdmin($scope);
+      self.currentTopics = MainControllerDataService.getTopics();
 
-        self.showFriend = function(person){
-          MainControllerDataService.getFriends(person)
-          .then(function(response){
-            person.friends = response;
-          })
-        }
+      self.saveAdmin = function(admin) {
+        MainControllerDataService.saveAdmin(admin);
+      };
 
-        
+      self.addTopic = function(topic) {
+        self.currentTopics.$add(topic);
+      };
+    });
 
-        
-      });
-
-
-  
 })();

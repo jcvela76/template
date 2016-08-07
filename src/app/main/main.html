@@ -1,23 +1,43 @@
 <div class="container">
+  <h1>{{ ctrl.greeting }}</h1>
 
- <h1>{{ctrl.greeting}}</h1>
- <h3>People</h3>
- <div ng-repeat="person in ctrl.people">
-    <div>
-        <label>Name: </label>
-        <span ng-bind="person.name"></span>
-    </div>  
-    <div>
-        <label>Email: </label>
-        <span ng-bind="person.email"></span>
-    </div> 
-    <button ng-click="ctrl.showFriend(person)">Show Friends</button>
-    <h5>Friends</h5>
-    <div ng-repeat="friend in person.friends">
-      {{friend.name}}
+  <div class="row">
+    <div class="col-xs-6">
+      <h3>Admin Info</h3>
+      <div>
+        <label>Name</label> <input type="text" ng-model="ctrl.currentAdmin.name">
+      </div>
+      <div>
+        <label>Email</label> <input type="text" ng-model="ctrl.currentAdmin.email">
+      </div>
+      <div>
+        <label>Password</label> <input type="text" ng-model="ctrl.currentAdmin.password">
+      </div>
+      <button class="btn btn-primary" ng-click="ctrl.saveAdmin(ctrl.currentAdmin)">Save</button>
+
+      <hr>
+
+      <h3>Add Topic</h3>
+      <div>
+        <label>Name</label> <input type="text" ng-model="ctrl.userTopic.name">
+      </div>
+      <div>
+        <label>Description</label> <textarea ng-model="ctrl.userTopic.description"></textarea>
+      </div>
+
+      <button class="btn btn-primary" ng-click="ctrl.addTopic(ctrl.userTopic)">Save</button>
     </div>
- </div>
+    <div class="col-xs-6">
+      <h3>Topics Info</h3>
+      <div ng-repeat="topic in ctrl.currentTopics">
+        <div>
+          <label>Name</label> <span ng-bind="topic.name"></span>
+        </div>
+        <div>
+          <label>Description</label> <span ng-bind="topic.description"></span>
+        </div>
+      </div>
+    </div>
 
-
-
+  </div>
 </div>
